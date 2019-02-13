@@ -78,7 +78,8 @@ while true
 do
 	_updateDirs
 	while read LINE; do
-		if [[ ! "$LINE" == *"#"* ]]; then
+		if [[ ! "$LINE" == *"#"* ]] && [[ -n "$LINE"]]; then
+			#~filters comments(#) and blanks lines
 			SERVER=$LINE #only for better readability
 			TIME=$(date +%s)
 			SIZE=$(du -B 50M "$WORKING_DIR/$SERVER/" | cut -d "	" -f 1)

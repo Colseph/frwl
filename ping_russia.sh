@@ -10,7 +10,7 @@
 #~ Variables ~#
 #~~~~~~~~~~~~~#
 
-LOG_FILE="./test.log" #logging is disabled by default as we want to fill out HDDs w/ DATA not un-needed logs
+LOG_FILE="/dev/null" #logging is disabled by default as we want to fill out HDDs w/ DATA not un-needed logs
 ITER=0
 COMP_ITER=0
 SERVER_LIST="./servers.txt" #insert any server IP here

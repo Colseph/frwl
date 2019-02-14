@@ -13,7 +13,7 @@
 LOG_FILE="/dev/null" #logging is disabled by default as we want to fill out HDDs w/ DATA not un-needed logs
 ITER=0
 COMP_ITER=0
-SERVER_LIST="./servers.txt" #insert any server IP here
+SERVER_LIST="./servers.txt" #insert IP list here
 SERVER_NUM=10 #seems like a decent enough default value?
 WORKING_DIR="./working_dir" #directory for uncompressed raw data
 TARBALL_DIR="./from_russia_with_love_comp" #directory for compressed tarballs

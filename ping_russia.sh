@@ -10,10 +10,11 @@
 #~ Variables ~#
 #~~~~~~~~~~~~~#
 
-LOG_FILE="/dev/null" #logging is disabled by default as we want to fill out HDDs w/ DATA not un-needed logs
+LOG_FILE="./test.log" #logging is disabled by default as we want to fill out HDDs w/ DATA not un-needed logs
 ITER=0
 COMP_ITER=0
 SERVER_LIST="./servers.txt" #insert any server IP here
+SERVER_NUM=10 #seems like a decent enough default value?
 WORKING_DIR="./working_dir" #directory for uncompressed raw data
 TARBALL_DIR="./from_russia_with_love_comp" #directory for compressed tarballs
 DEPENDENCIES=(traceroute tar); #not every distro has these pre-installed
@@ -60,7 +61,21 @@ _updateDirs() {
 			_checkPath "$WORKING_DIR/$LINE"
 			_checkPath "$TARBALL_DIR/$LINE"
 		fi
-	done < "$SERVER_LIST"
+	done < "./selected_servers.txt"
+}
+
+_verifyServerList() {
+	#~gets user defined amount of random lines from $SERVER_LIST
+	#~if server_new.txt doesnt already exist
+	#~might grab comments, so selected servers might be less than wanted
+	if [ -e "./selected_servers.txt" ]; then
+		_log date "[_verifyServerList]selected_servers.txt already exists"
+	else
+		_log date "[_verifyServerList]selected_servers.txt not found, creating w/ ($SERVER_NUM) ips"
+	       	shuf -n $SERVER_NUM "$SERVER_LIST" > "./selected_servers.txt"
+	fi
+	_log date "[_verifyServerList]server_new.txt verified with ips: "
+	_log "$(cat "./selected_servers.txt")"
 }
 
 #~~~~~~~~~~~~~~~~#
@@ -74,6 +89,7 @@ for p in "${DEPENDENCIES[@]}"; do
     fi
 done
 
+_verifyServerList
 while true
 do
 	_updateDirs
@@ -88,5 +104,5 @@ do
 			[ $SIZE -gt 1 ] && _tarBall
 			traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$ITER.$TIME.new"
 		fi
-	done < "$SERVER_LIST"
+	done < "./selected_servers.txt"
 done

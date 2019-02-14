@@ -78,17 +78,20 @@ _verifyServerList() {
 	_log "$(cat "./selected_servers.txt")"
 }
 
+_checkDeps() {
+	#~check dependencies
+	for p in "${DEPENDENCIES[@]}"; do
+		if ! [ -x "$(command -v $p)" ]; then
+		echo "$p is not installed"; exit 1;
+	    fi
+	done
+}
+
 #~~~~~~~~~~~~~~~~#
 #~ script_start ~#
 #~~~~~~~~~~~~~~~~#
 _log date "[main]script start"
-
-for p in "${DEPENDENCIES[@]}"; do
-	if ! [ -x "$(command -v $p)" ]; then
-        echo "$p is not installed"; exit 1;
-    fi
-done
-
+_checkDeps
 _verifyServerList
 while true
 do

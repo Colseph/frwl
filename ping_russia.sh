@@ -10,10 +10,10 @@
 #~ Variables ~#
 #~~~~~~~~~~~~~#
 
-LOG_FILE="./frwl.$(date +%Y-%m-%d).log" #log file(use /dev/null if u dont want logging)
+LOG_FILE="/dev/null" #logging is disabled by default as we want to fill out HDDs w/ DATA not un-needed logs
 ITER=0
 COMP_ITER=0
-SERVER="" #insert any server IP here
+SERVER_LIST="./servers.txt" #insert any server IP here
 WORKING_DIR="./working_dir" #directory for uncompressed raw data
 TARBALL_DIR="./from_russia_with_love_comp" #directory for compressed tarballs
 DEPENDENCIES=(traceroute tar); #not every distro has these pre-installed
@@ -45,19 +45,28 @@ _checkPath() {
 }
 
 _tarBall() {
-	#~creates tarball of collected data with id/timestamp range
+	#~creates tarball of collected data with id/timestamp
 	tar cjf "$TARBALL_DIR/$COMP_ITER.$TIME.$SERVER.tar.xz" "$WORKING_DIR"/* --remove-files
 	_log date "[_tarBall]created tarball '$COMP_ITER.$TIME.$SERVER.tar.xz'"
 	COMP_ITER=$(( COMP_ITER + 1 ))
 	ITER=0
+	_updateDirs
+}
+
+_updateDirs() {
+	#~check if if theres any updates to SERVER_LIST and make required directories
+	while read LINE; do
+		if [[ ! "$LINE" == *"#"* ]]; then
+			_checkPath "$WORKING_DIR/$LINE"
+			_checkPath "$TARBALL_DIR/$LINE"
+		fi
+	done < "$SERVER_LIST"
 }
 
 #~~~~~~~~~~~~~~~~#
 #~ script_start ~#
 #~~~~~~~~~~~~~~~~#
 _log date "[main]script start"
-_checkPath "$WORKING_DIR"
-_checkPath "$TARBALL_DIR"
 
 for p in "${DEPENDENCIES[@]}"; do
 	if ! [ -x "$(command -v $p)" ]; then
@@ -67,10 +76,16 @@ done
 
 while true
 do
-	TIME=$(date +%s)
-	SIZE=$(du -B 50M "$WORKING_DIR" | cut -d "	" -f 1)
-	traceroute -I $SERVER > "$WORKING_DIR/$ITER.$TIME.old"
-	ITER=$(( ITER + 1 ))
-	[ $SIZE -gt 1 ] && _tarBall
-	traceroute -I $SERVER > "$WORKING_DIR/$ITER.$TIME.new"
+	_updateDirs
+	while read LINE; do
+		if [[ ! "$LINE" == *"#"* ]]; then
+			SERVER=$LINE #only for better readability
+			TIME=$(date +%s)
+			SIZE=$(du -B 50M "$WORKING_DIR/$SERVER/" | cut -d "	" -f 1)
+			traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$ITER.$TIME.old"
+			ITER=$(( ITER + 1 ))
+			[ $SIZE -gt 1 ] && _tarBall
+			traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$ITER.$TIME.new"
+		fi
+	done < "$SERVER_LIST"
 done

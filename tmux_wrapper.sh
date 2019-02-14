@@ -23,6 +23,7 @@ also this is all an experiment, ive never done this before and idk how resource 
 
 LOG_FILE="/dev/null" #logging /dev/null for no loggint, &1 for STDOUT
 TMUX_DIR="./tmux_dir" #all the subdirectories for each tmux session will be in here(so you dont have 500+ dirs in your root)
+PING_RUSSIA="$( cd "$(dirname "$0")" ; pwd -P )/ping_russia.sh" #location of ping_russia.sh - default same dir as tmux_wrapper.sh
 SESSION_NUM=500 #idk you might want to change this
 SESSION_NAME="FRWLx$SESSION_NUM" #name for the tmux session
 NAMING_FORMAT='frwl-%03d' #printf - for directory and tmux window names - crazy people can change the padding to %03d etc for over 999 sessions...
@@ -61,7 +62,7 @@ for ((SESSION=1; SESSION<=$SESSION_NUM; SESSION++)); do
 	#~create some variables for better readability
 	CRNT_NAME="$(printf "$NAMING_FORMAT" $SESSION)"
 	_checkPath "$TMUX_DIR/$CRNT_NAME"
-	CMND="cd '$TMUX_DIR/$CRNT_NAME'; bash $(dirname "$0")/ping_russia.sh'"
+	CMND="cd '$TMUX_DIR/$CRNT_NAME'; bash '$PING_RUSSIA'"
 
 	tmux has-session -t "$SESSION_NAME" &&\
 	tmux new-window -a -t "$SESSION_NAME" -n "$CRNT_NAME" -d "$CMND"\

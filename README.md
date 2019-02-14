@@ -7,6 +7,8 @@ There is a survey available for those participating: [Google Form](https://goo.g
 
 There is also a place to submit any IPFS hashes of data you've collected: [Google Form](https://goo.gl/forms/o3vXwj4NPzODAttR2)
 
+If you all would like a place to chat I've set up an orbit channel (IPFS based chat): [Orbit Channel](https://orbit.chat/#/channel/frwl) (Just join #frwl by clicking the channel menu in the top left. Seems hot-linking doesn't work.)
+
 Goals
 ---
 
@@ -46,6 +48,8 @@ Guidelines
 Your traceroute logs should have a bunch of data. but if there are a bunch of `***` next to a hop then you're behind some sort of nasty filtering firewall. Pop a hole in it to get clean data. We want hostnames not just latency. It's probably a good idea to be using a VPN for this. Use one really close to you to cut down on the hops. I highly recommend NordVPN.
 
 Watch for updates to the script they may be important for data processing. You may have to work them into your environment somehow.
+
+If you are editing the code tabs are 4 spaces. Don't make me write a `CONTRIBUTING.md`.
 
 
 Extra stuff

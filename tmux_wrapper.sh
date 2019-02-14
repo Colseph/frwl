@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
 #~tmux_wrapper - starts user specified amount of tmux windows running ping_russia.sh
 : '
-the script only creates tmux sessions if they dont exist, so you can put this in your crontab and it will auto restart
+the script only creates tmux WINDOWS if they dont exist, so you can put this in your crontab and it will auto restart
 instance that have crashed and burned.
 
 creates a sub directory for each session, then start each instance in its own sub directory
 **you need to change the following paths in ping_russia.sh
-TARBALL_DIR, and SERVER_LIST need to be full static paths, NOT RELATIVE
+TARBALL_DIR, SERVER_LIST need to be full static paths, NOT RELATIVE
+its also recommended to use a static path for WORKING_DIR also IF your not running a unique ip per session
+(which is not implimented yet)
+then sessions sharing ips will pool files - problems:
+	- clobbering (w/ 500 instances running, your bound to get duplicates)
+	- incorrect ITER numbers(this is something w/ the iteration script in general)(but since its the timestamps were after,
+		i dont think itll cause massive problems
 ie.
 "/home/$USER/downloads/git/frwl/frwl_tarballs"
 "/home/$USER/downloads/git/frwl/servers.txt"
+"/home/$USER/downloads/git/frwl/working_dir"
 otherwise youll have to fish the tarballs out of each of the sub directories.
 and the script will fail because it cant find ./servers.txt
 (ping_russia.sh will automatically put tarballs in subdirectories by server name)

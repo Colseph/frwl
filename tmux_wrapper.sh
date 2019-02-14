@@ -64,7 +64,13 @@ for ((SESSION=1; SESSION<=$SESSION_NUM; SESSION++)); do
 	_checkPath "$TMUX_DIR/$CRNT_NAME"
 	CMND="cd '$TMUX_DIR/$CRNT_NAME'; bash '$PING_RUSSIA'"
 
-	tmux has-session -t "$SESSION_NAME" &&\
-	tmux new-window -a -t "$SESSION_NAME" -n "$CRNT_NAME" -d "$CMND"\
-	|| tmux new -s "$SESSION_NAME" -n "$CRNT_NAME" -d "$CMND"
+	#~if session doesnt exist creates a new one w/ a temporary window
+	#~this is because i cant choose the window number for the first
+	#~and i want each window number to match the session number
+	#~so if a window dies, it will be recreated in the right spot
+	tmux has-session -t "$SESSION_NAME" ||\
+	tmux new -s "$SESSION_NAME" -n "initial_window" -d "sleep 30"
+	#~then if window with $SESSION number doesnt exist, its created
+	tmux select-window -t "$SESSION_NAME:$SESSION" ||\
+	tmux new-window -a -t "$SESSION_NAME:$SESSION" -n "$CRNT_NAME" -d "$CMND"
 done

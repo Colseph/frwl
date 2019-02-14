@@ -61,8 +61,7 @@ for ((SESSION=1; SESSION<=$SESSION_NUM; SESSION++)); do
 	#~create some variables for better readability
 	CRNT_NAME="$(printf "$NAMING_FORMAT" $SESSION)"
 	_checkPath "$TMUX_DIR/$CRNT_NAME"
-	#CMND="cd '$TMUX_DIR/$CRNT_NAME'; bash $(dirname "$0")/ping_russia.sh'"
-	CMND="cd '$TMUX_DIR/$CRNT_NAME'; touch it_worked.txt; read"
+	CMND="cd '$TMUX_DIR/$CRNT_NAME'; bash $(dirname "$0")/ping_russia.sh'"
 
 	tmux has-session -t "$SESSION_NAME" &&\
 	tmux new-window -a -t "$SESSION_NAME" -n "$CRNT_NAME" -d "$CMND"\

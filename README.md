@@ -106,7 +106,7 @@ docker run -d --name frwl -v "localvolume":/from_russia_with_love_comp -e Server
 ===
 `tmux_wrapper.sh` starts a tmux session with x mount of windows, each running `ping_russia.sh`
 
-by default the structure will be the same as just running `ping_russia.sh` in addition to `./tmux_dir`, which is full of directories named after each tmux window. each of these is the working directory of the corrisponding tmux window.
+by default the structure will be the same as just running `ping_russia.sh` with the addition of `./tmux_dir`, which is full of directories named after each tmux window. each of these is the working directory of the corrisponding tmux window.
 
 these directories arent used by default(which is recommended), although you can change the paths in `ping_russia.sh` to be relative (ie. `./`) to use the working directories.
 

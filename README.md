@@ -1,5 +1,6 @@
 FRWL: From Russia with love
 ===
+_(i will try to keep this fork up to date with the original repo in terms of final data naming schemes and general organization, so it can be parsed along with the data from the original repo.)_
 
 link to inception [Reddit thread](https://www.reddit.com/r/DataHoarder/comments/apsd7v/with_russia_going_offline_for_a_test_some_time/)
 

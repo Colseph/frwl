@@ -19,6 +19,7 @@ TARBALL_DIR="./from_russia_with_love_comp" #directory for compressed tarballs
 #~~~stuff below this shouldnt need editing~~~(unless you know what your doing)
 TIMEZONE=$(date +”%Z”)
 DEPENDENCIES=(traceroute tar); #not every distro has these pre-installed
+SELECTED_SERVERS="./selected_servers.txt" #location to store random servers chosen by script
 ITER_SAVE_FILE="./iter_save" #file for keeping track of ITER values
 COMP_ITER_SAVE_FILE="./comp_iter_saves" #file for keeping track of COMP_ITER values
 SAVE_FILE_DELIM='---' #delimiter used in save files. its escaped so you can use almost anything. parenthesis will break it, and maybe other characters i havent tested
@@ -65,21 +66,21 @@ _updateDirs() {
             _checkPath "$WORKING_DIR/$LINE"
             _checkPath "$TARBALL_DIR/$LINE"
         fi
-    done < "./selected_servers.txt"
+    done < "$SELECTED_SERVERS"
 }
 
 _verifyServerList() {
     #~gets user defined amount of random lines from $SERVER_LIST
     #~if server_new.txt doesnt already exist
     #~might grab comments, so selected servers might be less than wanted
-    if [ -e "./selected_servers.txt" ]; then
-        _log date "[_verifyServerList]selected_servers.txt already exists"
+    if [ -e "$SELECTED_SERVERS" ]; then
+        _log date "[_verifyServerList]$SELECTED_SERVERS already exists"
     else
-        _log date "[_verifyServerList]selected_servers.txt not found, creating w/ up to ($SERVER_NUM) ips"
-            shuf -n $SERVER_NUM "$SERVER_LIST" > "./selected_servers.txt"
+        _log date "[_verifyServerList]$SELECTED_SERVERS not found, creating w/ up to ($SERVER_NUM) ips"
+            shuf -n $SERVER_NUM "$SERVER_LIST" > "$SELECTED_SERVERS"
     fi
-    _log date "[_verifyServerList]selcted_servers.txt verified with ips: "
-    _log "$(cat "./selected_servers.txt")"
+    _log date "[_verifyServerList]$SELECTED_SERVERS verified with ips: "
+    _log "$(cat "$SELECTED_SERVERS")"
 }
 
 _checkDeps() {
@@ -181,5 +182,5 @@ do
             ECODE=$?
             _log "[main]traceroute -I $SERVER completed w/ result: $ECODE"
         fi
-    done < "./selected_servers.txt"
+    done < "$SELECTED_SERVERS"
 done

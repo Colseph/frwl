@@ -4,32 +4,6 @@
 the script only creates tmux WINDOWS if they dont exist, so you can put this in your crontab and it will auto restart
 instance that have crashed and burned.
 
-creates a sub directory for each session, then start each instance in its own sub directory
-**you need to change the following paths in ping_russia.sh
-TARBALL_DIR, SERVER_LIST need to be full static paths, NOT RELATIVE
-its also recommended to use a static path for WORKING_DIR also IF your not running a unique ip per session
-(which is not implimented yet)
-then sessions sharing ips will pool files - problems:
-	- clobbering (w/ 500 instances running, your bound to get duplicates)
-	- incorrect ITER numbers(this is something w/ the iteration script in general)(but since its the timestamps were after,
-	i dont think itll cause massive problems)
-ie.
-"/home/$USER/downloads/git/frwl/frwl_tarballs"
-"/home/$USER/downloads/git/frwl/servers.txt"
-"/home/$USER/downloads/git/frwl/working_dir"
-otherwise youll have to fish the tarballs out of each of the sub directories.
-and the script will fail because it cant find ./servers.txt
-(ping_russia.sh will automatically put tarballs in subdirectories by server name)
-
-its also recommented to create a new servers.txt with the total amount of servers you want to trace
-ie 
-	`mv servers.txt servers_original.txt; shuf -n 400 servers_original.txt` > servers.txt` #now servers.txt only has 400 randomly selected ips in it
-this way youll get max of 20GB raw data, (50M*400ServersAvailable)/1000M vs this example:
-if i had ping_russia.sh set to 10 servers, and i had 500 instances running in tmux, thers a POSSIBILITY(if every server is unique)
-to be tracing 5000 servers and have a max of (10Servers*500Instances*50M)/1000M = 250GB of raw uncompressed data..
-
-but idk you now your system, you can choose what you want to do.
-
 also this is all an experiment, ive never done this before and idk how resource intensive it is, so youll want to change stuff according to your setup
 '
 
@@ -81,7 +55,7 @@ for ((SESSION=1; SESSION<=$SESSION_NUM; SESSION++)); do
 	CMND="cd '$TMUX_DIR/$CRNT_NAME'; bash '$PING_RUSSIA'"
 
 	#~if session doesnt exist creates a new one w/ a temporary window
-	#~this is because i cant choose the window number for the first
+	#~this is because i cant choose the window number for the first window of a session
 	#~and i want each window number to match the session number
 	#~so if a window dies, it will be recreated in the right spot
 	tmux has-session -t "$SESSION_NAME" ||\

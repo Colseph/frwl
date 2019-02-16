@@ -167,10 +167,12 @@ do
             SERVER=$LINE #only for better readability
             TIME=$(date +%s)
             SIZE=$(du -s -B 50M "${WORKING_DIR}" | awk '{printf $1}')
+            ITER=$(_increment "$ITER_SAVE_FILE")
             _log "[main]LOOP_VARIABLES:"
             _log "SERVER: $SERVER"
             _log "TIME: $TIME"
             _log "SIZE: $SIZE"
+            _log "ITER: $ITER"
             traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$ITER.$TIME.old"
             ECODE=$?
             _log "[main]traceroute -I $SERVER completed w/ result: $ECODE"
@@ -178,8 +180,6 @@ do
             traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$ITER.$TIME.new"
             ECODE=$?
             _log "[main]traceroute -I $SERVER completed w/ result: $ECODE"
-            ITER=$(_increment "$ITER_SAVE_FILE")
-            _log "ITER: $ITER"
         fi
     done < "./selected_servers.txt"
 done

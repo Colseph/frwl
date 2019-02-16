@@ -21,6 +21,8 @@ _(i will try to keep this fork up to date with the original repo in terms of fin
  - i believe thats most differences, aside from some organization and syntax.
  
  - also ive patched together a tmux_wrapper of sorts. starts a tmux session with how ever many windows the user specifies in the config session. each window running its own instance of ping_russia.sh
+ 
+<hr>
 
 link to inception [Reddit thread](https://www.reddit.com/r/DataHoarder/comments/apsd7v/with_russia_going_offline_for_a_test_some_time/)
 

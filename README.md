@@ -20,7 +20,7 @@ _(i will try to keep this fork up to date with the original repo in terms of fin
  
  - i believe thats most differences, aside from some organization and syntax.
  
- - also ive patched together a tmux_wrapper of sorts. starts a tmux session with how ever many windows the user specifies in the config session. each window running its own instance of ping_russia.sh
+ - also ive patched together a tmux_wrapper of sorts, to run multiple instances at a time. **see <a href="#tmux_wrapper">tmux</a> section below**
  
 <hr>
 
@@ -101,6 +101,28 @@ By creating a script to create multiple containers and volumes to automate launc
  An image has been provided at https://hub.docker.com/r/danuke/frwl
 
 docker run -d --name frwl -v "localvolume":/from_russia_with_love_comp -e ServerIP="IP/Host" danukefl/frwl
+
+<a id="tmux_wrapper">Tmux</a>
+===
+`tmux_wrapper.sh` starts a tmux session with x mount of windows, each running `ping_russia.sh`
+
+by default the structure will be the same as just running `ping_russia.sh` in addition to `./tmux_dir`, which is full of directories named after each tmux window. each of these is the working directory of the corrisponding tmux window.
+
+these directories arent used by default(which is recommended), although you can change the paths in `ping_russia.sh` to be relative (ie. `./`) to use the working directories.
+
+Tmux Run
+---
+**after** you have edited the config/variable sections of both `tmux_wrapper.sh` and `ping_russia.sh`, just run `tmux_wrapper.sh`
+
+you can put also put it in your crontab to automatically restart windows/instances what have died.
+
+`0 * * * * /bin/bash /path/to/tmux_wrapper.sh` will check every hour.
+
+if you dont have any other tmux sessions running you can kill with `tmux kill-server`
+
+or if you just want to kill the tmux_wrapper session, `tmux kill-session -t [session-name]`
+
+by default the session name is `FRWLx$SESSION_NUM`
 
 
 

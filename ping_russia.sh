@@ -10,18 +10,20 @@
 #~ Variables ~#
 #~~~~~~~~~~~~~#
 
-LOG_FILE="frwl.log" #log is for debugging, and thus very verbose, recommend to set to /dev/null to disable
-SERVER_LIST="./servers.txt" #insert IP list here
+#~the $( cd "$(dirname "$0")" ; pwd -P) part is basically ./ except makes it a full path
+#~only needed if you use tmux_wrapper.sh, see tmux_wrapper section in README to see why this is important
+LOG_FILE="$( cd "$(dirname "$0")" ; pwd -P )/frwl.log" #log is for debugging, and thus very verbose, recommend to set to /dev/null to disable
+SERVER_LIST="$( cd "$(dirname "$0")" ; pwd -P )/servers.txt" #insert IP list here
 SERVER_NUM=10 #seems like a decent enough default value?
-WORKING_DIR="./working_dir" #directory for uncompressed raw data
-TARBALL_DIR="./from_russia_with_love_comp" #directory for compressed tarballs
+WORKING_DIR="$( cd "$(dirname "$0")" ; pwd -P )/working_dir" #directory for uncompressed raw data
+TARBALL_DIR="$( cd "$(dirname "$0")" ; pwd -P )/from_russia_with_love_comp" #directory for compressed tarballs
 
 #~~~stuff below this shouldnt need editing~~~(unless you know what your doing)
 TIMEZONE=$(date +”%Z”)
 DEPENDENCIES=(traceroute tar); #not every distro has these pre-installed
-SELECTED_SERVERS="./selected_servers.txt" #location to store random servers chosen by script
-ITER_SAVE_FILE="./iter_save" #file for keeping track of ITER values
-COMP_ITER_SAVE_FILE="./comp_iter_saves" #file for keeping track of COMP_ITER values
+SELECTED_SERVERS="$( cd "$(dirname "$0")" ; pwd -P )/selected_servers.txt" #location to store random servers chosen by script
+ITER_SAVE_FILE="$( cd "$(dirname "$0")" ; pwd -P )/iter_save" #file for keeping track of ITER values
+COMP_ITER_SAVE_FILE="$( cd "$(dirname "$0")" ; pwd -P )/comp_iter_saves" #file for keeping track of COMP_ITER values
 SAVE_FILE_DELIM='---' #delimiter used in save files. its escaped so you can use almost anything. parenthesis will break it, and maybe other characters i havent tested
 
 #~~~~~~~~~~~~~#

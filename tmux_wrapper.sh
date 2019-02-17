@@ -23,24 +23,24 @@ NAMING_FORMAT='frwl-%03d' #printf - for directory and tmux window names - crazy 
 #~~~~~~~~~~~~~#
 
 _log() {
-	#~just a log function
-	#~case logic for nice formating
-	case $1 in
-		date)
-			#~appends date to front
-			printf '%s\n' "`date +%Y-%m-%d_%T` ---  $2" >> $LOG_FILE
-			;;
-		*)
-			#~just logs
-			printf '%s\n' "$@" >> $LOG_FILE
-			;;
-	esac
+    #~just a log function
+    #~case logic for nice formating
+    case $1 in
+        date)
+            #~appends date to front
+            printf '%s\n' "`date +%Y-%m-%d_%T` ---  $2" >> $LOG_FILE
+            ;;
+        *)
+            #~just logs
+            printf '%s\n' "$@" >> $LOG_FILE
+            ;;
+    esac
 }
 
 _checkPath() {
-	#~verifies paths exist/creates if needed
-	[ -e "$1" ] || mkdir -p "$1"
-	_log date "[_checkPath]checking directory $1"
+    #~verifies paths exist/creates if needed
+    [ -e "$1" ] || mkdir -p "$1"
+    _log date "[_checkPath]checking directory $1"
 }
 
 #~~~~~~~~~~~~~~~~#
@@ -49,18 +49,18 @@ _checkPath() {
 _log date "[main]script start"
 
 for ((SESSION=1; SESSION<=$SESSION_NUM; SESSION++)); do
-	#~create some variables for better readability
-	CRNT_NAME="$(printf "$NAMING_FORMAT" $SESSION)"
-	_checkPath "$TMUX_DIR/$CRNT_NAME"
-	CMND="cd '$TMUX_DIR/$CRNT_NAME'; bash '$PING_RUSSIA'"
+    #~create some variables for better readability
+    CRNT_NAME="$(printf "$NAMING_FORMAT" $SESSION)"
+    _checkPath "$TMUX_DIR/$CRNT_NAME"
+    CMND="cd '$TMUX_DIR/$CRNT_NAME'; bash '$PING_RUSSIA'"
 
-	#~if session doesnt exist creates a new one w/ a temporary window
-	#~this is because i cant choose the window number for the first window of a session
-	#~and i want each window number to match the session number
-	#~so if a window dies, it will be recreated in the right spot
-	tmux has-session -t "$SESSION_NAME" ||\
-	tmux new -s "$SESSION_NAME" -n "initial_window" -d "sleep 30"
-	#~then if window with $SESSION number doesnt exist, its created
-	tmux select-window -t "$SESSION_NAME:$SESSION" ||\
-	tmux new-window -a -t "$SESSION_NAME:$SESSION" -n "$CRNT_NAME" -d "$CMND"
+    #~if session doesnt exist creates a new one w/ a temporary window
+    #~this is because i cant choose the window number for the first window of a session
+    #~and i want each window number to match the session number
+    #~so if a window dies, it will be recreated in the right spot
+    tmux has-session -t "$SESSION_NAME" ||\
+    tmux new -s "$SESSION_NAME" -n "initial_window" -d "sleep 30"
+    #~then if window with $SESSION number doesnt exist, its created
+    tmux select-window -t "$SESSION_NAME:$SESSION" ||\
+    tmux new-window -a -t "$SESSION_NAME:$SESSION" -n "$CRNT_NAME" -d "$CMND"
 done

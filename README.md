@@ -11,7 +11,7 @@ _(i will try to keep this fork up to date with the original repo in terms of fin
  
  - the `$ITER` and `$COMP_ITER` variables are handled on a per server basis, and saved to a file. this means you if you stop and restart the script it will pick up right where it left off(it could skip a number if you killed it between the `_increment` call and the the `traceroute`).
  
- - directories are flat(#3). this isnt a huge problem for the `$WORKING_DIR` as there will only ever be around 12K files per folder. but if you were to run it for a **VERY** long time, you could get enough tarballs in the `$TARBALL_DIR` to start causing problems. if i do impliment #3, the directories will only be created as needed, instead of creating all of them every loop. (check one directory per loop vs ~1333 per loop)
+- directories are flat([#3](https://github.com/Colseph/frwl/issues/3)). this isnt a huge problem for the `$WORKING_DIR` as there will only ever be around 12K files per folder. but if you were to run it for a **VERY** long time, you could get enough tarballs in the `$TARBALL_DIR` to start causing problems. if i do impliment [#3](https://github.com/Colseph/frwl/issues/3), the directories will only be created as needed, instead of creating all of them every loop. (check one directory per loop vs ~1333 per loop)
  <br>ie.
  <br>`RANDOM_DIR=$(_randomDir)`
  <br>`_checkPath "$TARBALL_DIR/$RANDOM_DIR"`

@@ -58,7 +58,6 @@ _tarBall() {
     COMP_ITER=$(_increment "$COMP_ITER_SAVE_FILE")
     _log date "[_tarBall]COMP_ITER: $COMP_ITER"
     ITER=$(_increment 0 "$ITER_SAVE_FILE")
-    _updateDirs
 }
 
 _updateDirs() {
@@ -129,6 +128,7 @@ _increment() {
 }
 
 _randomDir() {
+    #~just here in case i decide to use a hashed directory
     #~gets a random 3-level directory
     RETURN_VAL=$(dd if=/dev/urandom bs=512 count=1 2>&1 | md5sum | tail -1 | awk '{printf $1}' | cut -b1,2 --output-delimiter=/)
     printf '%s' "$RETURN_VAL"
@@ -148,6 +148,7 @@ _escapeString() {
 _log date "[main]script start"
 _checkDeps
 _verifyServerList
+_updateDirs
 #~log variables
 _log "[main]SCRIPT_VARIABLES:"
 _log "LOG_FILE: $LOG_FILE"
@@ -163,7 +164,6 @@ _log "SAVE_FILE_DELIM: '$SAVE_FILE_DELIM'"
 
 while true
 do
-    _updateDirs
     while read LINE; do
         if [[ ! "$LINE" == *"#"* ]] && [[ -n "$LINE" ]]; then
             #~filters comments(#) and blanks lines

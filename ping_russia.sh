@@ -142,9 +142,6 @@ do
             ECODE=$?
             _log "[main]traceroute -I $SERVER completed w/ result: $ECODE"
             [ $SIZE -gt 1 ] && _tarBall
-            traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$TIME.$TIMEZONE.new"
-            ECODE=$?
-            _log "[main]traceroute -I $SERVER completed w/ result: $ECODE"
         fi
     done < "$SELECTED_SERVERS"
 done

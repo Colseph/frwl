@@ -2,7 +2,7 @@ FRWL: From Russia with love
 ===
 _(i will try to keep this fork up to date with the original repo in terms of final data naming schemes and general organization, so it can be parsed along with the data from the original repo.)_
 ## how this fork differs:
- - this fork creates a `selected_servers.txt` this way if you stop and start the script it use the same
+- this fork creates a `selected_servers.txt` this way if you stop and start the script it uses the same
  servers it did last time.
  
  - supports comments in `$SERVER_LIST`. specified by a `#`. can be anywhere in the line.
@@ -11,7 +11,7 @@ _(i will try to keep this fork up to date with the original repo in terms of fin
  
  - the `$ITER` and `$COMP_ITER` variables are handled on a per server basis, and saved to a file. this means you if you stop and restart the script it will pick up right where it left off(it could skip a number if you killed it between the `_increment` call and the the `traceroute`).
  
- - directories are flat. this isnt a huge problem for the `$WORKING_DIR` as there will only ever be around 12K files per folder. but if you were to run it for a **VERY** long time, you could get enough tarballs in the `$TARBALL_DIR` to start causing problems. if i do impliment it, the directories will only be created as needed, instead of creating all of them every loop. (check one directory per loop vs ~1333 per loop)
+ - directories are flat(#3). this isnt a huge problem for the `$WORKING_DIR` as there will only ever be around 12K files per folder. but if you were to run it for a **VERY** long time, you could get enough tarballs in the `$TARBALL_DIR` to start causing problems. if i do impliment #3, the directories will only be created as needed, instead of creating all of them every loop. (check one directory per loop vs ~1333 per loop)
  <br>ie.
  <br>`RANDOM_DIR=$(_randomDir)`
  <br>`_checkPath "$TARBALL_DIR/$RANDOM_DIR"`

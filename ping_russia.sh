@@ -138,7 +138,7 @@ do
             _log "SERVER: $SERVER"
             _log "TIME: $TIME"
             _log "SIZE: $SIZE"
-            traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$TIME.$TIMEZONE.old"
+            traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$TIME.$TIMEZONE"
             ECODE=$?
             _log "[main]traceroute -I $SERVER completed w/ result: $ECODE"
             [ $SIZE -gt 1 ] && _tarBall

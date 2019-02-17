@@ -22,9 +22,6 @@ TARBALL_DIR="$( cd "$(dirname "$0")" ; pwd -P )/from_russia_with_love_comp" #dir
 TIMEZONE=$(date +”%Z”)
 DEPENDENCIES=(traceroute tar); #not every distro has these pre-installed
 SELECTED_SERVERS="$( cd "$(dirname "$0")" ; pwd -P )/selected_servers.txt" #location to store random servers chosen by script
-ITER_SAVE_FILE="$( cd "$(dirname "$0")" ; pwd -P )/iter_save" #file for keeping track of ITER values
-COMP_ITER_SAVE_FILE="$( cd "$(dirname "$0")" ; pwd -P )/comp_iter_saves" #file for keeping track of COMP_ITER values
-SAVE_FILE_DELIM='---' #delimiter used in save files. its escaped so you can use almost anything. parenthesis will break it, and maybe other characters i havent tested
 
 #~~~~~~~~~~~~~#
 #~ Functions ~#
@@ -53,11 +50,8 @@ _checkPath() {
 
 _tarBall() {
     #~creates tarball of collected data with id/timestamp
-    tar cjf "$TARBALL_DIR/$SERVER/$COMP_ITER.$TIME.$SERVER.tar.xz" "$WORKING_DIR/$SERVER"/* && rm -rf "$WORKING_DIR/$SERVER"/*
-    _log date "[_tarBall]created tarball '$COMP_ITER.$TIME.$SERVER.tar.xz'"
-    COMP_ITER=$(_increment "$COMP_ITER_SAVE_FILE")
-    _log date "[_tarBall]COMP_ITER: $COMP_ITER"
-    ITER=$(_increment 0 "$ITER_SAVE_FILE")
+    tar cjf "$TARBALL_DIR/$SERVER/$TIME.tar.xz" "$WORKING_DIR/$SERVER"/* && rm -rf "$WORKING_DIR/$SERVER"/*
+    _log date "[_tarBall]created tarball '$TIME.tar.xz'"
 }
 
 _updateDirs() {
@@ -100,33 +94,6 @@ _checkDeps() {
     fi
 }
 
-_increment() {
-    #~keeps ITER and COMP_ITER straight using a save file of sorts
-    #~takes option and filename as arguments
-    case $1 in
-        0)
-            #~triggers on tar - sets iter back to zero
-            [[ "$(cat "$2")" == *"${SERVER}${SAVE_FILE_DELIM}"* ]] || printf '%s\n' "${SERVER}${SAVE_FILE_DELIM}0" >> "$2"
-            sed -i "s/${SERVER}$(_escapeString "$SAVE_FILE_DELIM")\([0-9]\+\)/${SERVER}$(_escapeString "$SAVE_FILE_DELIM")0/g" "$2"
-            printf '%s' '0' #returns 0 as value
-            _log date "[_increment]set value for $SERVER in $2 to 0"
-            ;;
-        *)
-            #~adds to save file it doesnt exist
-            [[ "$(cat "$1")" == *"${SERVER}${SAVE_FILE_DELIM}"* ]] || printf '%s\n' "${SERVER}${SAVE_FILE_DELIM}0" >> "$1"
-            #~grabs current iter state from list
-            RETURN_VAL=$(cat "$1" | grep "${SERVER}$(_escapeString "$SAVE_FILE_DELIM")")
-            _log date "[_increment]RETURN_VAL: '$RETURN_VAL' (pre parse)"
-            RETURN_VAL=${RETURN_VAL#*"$SAVE_FILE_DELIM"}
-            _log date "[_increment]RETURN_VAL: '$RETURN_VAL' (post parse)"
-            #~increments value in the save file for next read
-            sed -i "s/${SERVER}$(_escapeString "$SAVE_FILE_DELIM")\([0-9]\+\)/${SERVER}$(_escapeString "$SAVE_FILE_DELIM")$(($RETURN_VAL + 1))/g" "$1"
-            printf '%s' "$RETURN_VAL" #retuns value read from $1
-            _log date "[_increment]read value for $SERVER in $1 as $RETURN_VAL, and set new as $(($RETURN_VAL + 1)) "
-            ;;
-    esac
-}
-
 _randomDir() {
     #~just here in case i decide to use a hashed directory
     #~gets a random 3-level directory
@@ -158,9 +125,6 @@ _log "WORKING_DIR: $WORKING_DIR"
 _log "TARBALL_DIR: $TARBALL_DIR"
 _log "TIMEZONE: $TIMEZONE"
 _log "DEPENDENCIES:[${DEPENDENCIES[@]}]"
-_log "ITER_SAVE_FILE: $ITER_SAVE_FILE"
-_log "COMP_ITER_SAVE_FILE: $COMP_ITER_SAVE_FILE"
-_log "SAVE_FILE_DELIM: '$SAVE_FILE_DELIM'"
 
 while true
 do
@@ -170,17 +134,15 @@ do
             SERVER=$LINE #only for better readability
             TIME=$(date +%s)
             SIZE=$(du -s -B 50M "$WORKING_DIR/$SERVER" | awk '{printf $1}')
-            ITER=$(_increment "$ITER_SAVE_FILE")
             _log "[main]LOOP_VARIABLES:"
             _log "SERVER: $SERVER"
             _log "TIME: $TIME"
             _log "SIZE: $SIZE"
-            _log "ITER: $ITER"
-            traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$ITER.$TIME.old"
+            traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$TIME.$TIMEZONE.old"
             ECODE=$?
             _log "[main]traceroute -I $SERVER completed w/ result: $ECODE"
             [ $SIZE -gt 1 ] && _tarBall
-            traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$ITER.$TIME.new"
+            traceroute -I $SERVER > "$WORKING_DIR/$SERVER/$TIME.$TIMEZONE.new"
             ECODE=$?
             _log "[main]traceroute -I $SERVER completed w/ result: $ECODE"
         fi

@@ -1,6 +1,6 @@
 FRWL: From Russia with love
 ===
-_(i will try to keep this fork up to date with the original repo in terms of final data naming schemes and general organization, so it can be parsed along with the data from the original repo.)_
+(_this branch probably has bugs and wont be developed. just keeping for save file functions_)
 ## how this fork differs:
  - this fork creates a `selected_servers.txt` this way if you stop and start the script it use the same
  servers it did last time.

@@ -53,7 +53,7 @@ _checkPath() {
 
 _tarBall() {
     #~creates tarball of collected data with id/timestamp
-    tar cjf "$TARBALL_DIR/$COMP_ITER.$TIME.$SERVER.tar.xz" "$WORKING_DIR"/* && rm -rf "$WORKING_DIR"/*
+    tar cjf "$TARBALL_DIR/$SERVER/$COMP_ITER.$TIME.$SERVER.tar.xz" "$WORKING_DIR/$SERVER"/* && rm -rf "$WORKING_DIR/$SERVER"/*
     _log date "[_tarBall]created tarball '$COMP_ITER.$TIME.$SERVER.tar.xz'"
     COMP_ITER=$(_increment "$COMP_ITER_SAVE_FILE")
     _log date "[_tarBall]COMP_ITER: $COMP_ITER"

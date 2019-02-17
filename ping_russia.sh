@@ -169,7 +169,7 @@ do
             #~filters comments(#) and blanks lines
             SERVER=$LINE #only for better readability
             TIME=$(date +%s)
-            SIZE=$(du -s -B 50M "${WORKING_DIR}" | awk '{printf $1}')
+            SIZE=$(du -s -B 50M "$WORKING_DIR/$SERVER" | awk '{printf $1}')
             ITER=$(_increment "$ITER_SAVE_FILE")
             _log "[main]LOOP_VARIABLES:"
             _log "SERVER: $SERVER"

@@ -36,11 +36,11 @@ _log() {
     case $1 in
         date)
             #~appends date to front
-            printf '%s\n' "`date +%Y-%m-%d_%T` ---  $2" >> $LOG_FILE
+            printf '%s\n' "`date +%Y-%m-%d_%T` ---  [$$]$2" >> $LOG_FILE
             ;;
         *)
             #~just logs
-            printf '%s\n' "$@" >> $LOG_FILE
+            printf '%s\n' "$@" >> [$$]$LOG_FILE
             ;;
     esac
 }

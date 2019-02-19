@@ -52,8 +52,8 @@ _checkPath() {
 _tarBall() {
     #~creates tarball of collected data with id/timestamp range
     RANDOM_TAR_DIR="$(_randomDir)"
-    _checkPath "${TARBALL_DIR}/${RANDOM_TAR_DIR}"
-    tar -cjf "${TARBALL_DIR}/${RANDOM_TAR_DIR}/${COMP_ITER}.${TIME}.${SERVER}.tar.bz2" "${WORKING_DIR}"/* && rm -rf "$WORKING_DIR"/*
+    _checkPath "${TARBALL_DIR}/${SERVER}/${RANDOM_TAR_DIR}"
+    tar -cjf "${TARBALL_DIR}/${SERVER}/${RANDOM_TAR_DIR}/${COMP_ITER}.${TIME}.${SERVER}.tar.bz2" "${WORKING_DIR}/${SERVER}"/* && rm -rf "$WORKING_DIR/${SERVER}"/*
     _log date "[_tarBall]created tarball '${COMP_ITER}.${TIME}.${SERVER}.tar.bz2'"
     COMP_ITER=$(( COMP_ITER + 1 ))
     ITER=0
@@ -86,12 +86,12 @@ while true
 do
     for SERVER in $(grep -v '^#' ${SERVERS} | grep -v '^$' | /usr/bin/sort -R | head -${PROBES}); do
         RANDOM_DIR="$(_randomDir)"
-        _checkPath "${WORKING_DIR}/${RANDOM_DIR}"
+        _checkPath "${WORKING_DIR}/${SERVER}/${RANDOM_DIR}"
         TIME=$(date +%s)
-        SIZE=$(du -s -B 50M "${WORKING_DIR}" | awk '{print $1}')
-        traceroute -n -I ${SERVER} > "${WORKING_DIR}/${RANDOM_DIR}/${ITER}.${TIME}.old"
+        SIZE=$(du -s -B 50M "${WORKING_DIR}/${SERVER}" | awk '{print $1}')
+        traceroute -n -I ${SERVER} > "${WORKING_DIR}/${SERVER}/${RANDOM_DIR}/${ITER}.${TIME}.${TIMEZONE}.old"
         ITER=$(( ITER + 1 ))
         [ ${SIZE} -gt 1 ] && _tarBall
-        traceroute -I ${SERVER} > "${WORKING_DIR}/${RANDOM_DIR}/${ITER}.${TIME}.new"
+        traceroute -I ${SERVER} > "${WORKING_DIR}/${SERVER}/${RANDOM_DIR}/${ITER}.${TIME}.${TIMEZONE}.new"
     done
 done

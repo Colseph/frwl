@@ -2,16 +2,17 @@ FRWL: From Russia with love
 ===
 _(i will try to keep this fork up to date with the original repo in terms of final data naming schemes and general organization, so it can be parsed along with the data from the original repo.)_
 ## how this fork differs:
+
 - this fork creates a `selected_servers.txt` this way if you stop and start the script it uses the same
- servers it did last time.
+ servers it did last time.(and your not getting new servers **every** loop...)
  
- - supports comments in `$SERVER_LIST`. specified by a `#`. can be anywhere in the line.
+ - comments in `$SERVER_LIST` can have a `#` anywhere in the line.(not a big difference)
    - `123.456.789` will be processed
    - `#123.456.789` or `123.456#.789` wont.
  
- - the `$ITER` and `$COMP_ITER` variables are handled on a per server basis, and saved to a file. this means you if you stop and restart the script it will pick up right where it left off(it could skip a number if you killed it between the `_increment` call and the the `traceroute`).
+ - the `$ITER` and `$COMP_ITER` variables are handled on a per server basis, and saved to a file. this means you if you stop and restart the script it will pick up right where it left off(it could skip a number if you killed it between the `_increment` call and the the `traceroute`). (i may remove this, as it causes issues when running w/ the tmux_wrapper[#5](https://github.com/Colseph/frwl/issues/5))
  
-- directories are flat([#3](https://github.com/Colseph/frwl/issues/3)). this isnt a huge problem for the `$WORKING_DIR` as there will only ever be around 12K files per folder. but if you were to run it for a **VERY** long time, you could get enough tarballs in the `$TARBALL_DIR` to start causing problems. if i do impliment [#3](https://github.com/Colseph/frwl/issues/3),  ~~the directories will only be created as needed, instead of creating all of them every loop. (check one directory per loop vs 1333 per loop)~~
+- directories are flat([#3](https://github.com/Colseph/frwl/issues/3)). this isnt a huge problem for the `$WORKING_DIR` as there will only ever be around 12K files per folder. but if you were to run it for a **VERY** long time, you could get enough tarballs in the `$TARBALL_DIR` to start causing problems. **if i do implement** [#3](https://github.com/Colseph/frwl/issues/3),  ~~the directories will only be created as needed, instead of creating all of them every loop. (check one directory per loop vs 1333 per loop)~~
  ~~<br>ie.
  <br>`RANDOM_DIR=$(_randomDir)`
  <br>`_checkPath "$TARBALL_DIR/$RANDOM_DIR"`
@@ -110,6 +111,8 @@ docker run -d --name frwl -v "localvolume":/from_russia_with_love_comp -e Server
 by default the structure will be the same as just running `ping_russia.sh` with the addition of `./tmux_dir`, which is full of directories named after each tmux window. each of these is the working directory of the corrisponding tmux window.
 
 these directories arent used by default(which is recommended), although you can change the paths in `ping_russia.sh` to be relative (ie. `./`) to use the working directories.
+
+(currently there is an issue with save files when running this, see [#5](https://github.com/Colseph/frwl/issues/5). changing savefile path to a relative path `./` will fix it, but will introduce `$SESSION_NUM` amount of files with the same `$*ITER` variable in name)
 
 Tmux Run
 ---
